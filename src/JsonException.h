@@ -5,17 +5,21 @@
 #include <string_view>
 #include <exception>
 
-class JsonException : std::exception {
-private:
-    std::string _message;
+namespace bjson {
+    class JsonException : std::exception {
+    private:
+        std::string _message;
 
-public:
-    JsonException();
+    public:
+        JsonException();
 
-    JsonException(const std::string_view &message);
+        JsonException(const std::string_view &message);
 
-    const char *what() const noexcept;
-};
+        const char *what() const
+
+        noexcept;
+    };
+}
 
 
 #endif

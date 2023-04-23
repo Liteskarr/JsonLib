@@ -32,8 +32,8 @@ namespace bjson {
             bool *_boolean;
             int64_t *_int;
             std::string *_string;
-            std::map<std::string, JsonObject> *_object;
-            std::vector<JsonObject> *_array;
+            std::vector <JsonObject> *_array;
+            std::map <std::string, JsonObject> *_object;
         } _container;
 
     public:
@@ -83,16 +83,18 @@ namespace bjson {
         std::string &as_string() const;
 
         [[nodiscard]]
-        std::vector<JsonObject> &as_array() const;
+        std::vector <JsonObject> &as_array() const;
 
         [[nodiscard]]
-        std::map<std::string, JsonObject> &as_object() const;
+        std::map <std::string, JsonObject> &as_object() const;
 
         [[nodiscard]]
         JsonObject &operator[](size_t key) const;
 
         [[nodiscard]]
         JsonObject &operator[](const std::string &key) const;
+
+        ~JsonObject();
     };
 }
 

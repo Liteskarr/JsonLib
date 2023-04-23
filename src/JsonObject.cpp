@@ -92,21 +92,21 @@ namespace bjson {
         return *_container._string;
     }
 
-    std::vector<JsonObject>& JsonObject::as_array() const {
+    std::vector <JsonObject> &JsonObject::as_array() const {
         if (!is_array()) {
             throw JsonException("JsonObject must be array type!");
         }
         return *_container._array;
     }
 
-    std::map<std::string, JsonObject>& JsonObject::as_object() const {
+    std::map <std::string, JsonObject> &JsonObject::as_object() const {
         if (!is_object()) {
             throw JsonException("JsonObject must be object type!");
         }
         return *_container._object;
     }
 
-    JsonObject& JsonObject::operator[](size_t key) const {
+    JsonObject &JsonObject::operator[](size_t key) const {
         if (!is_array()) {
             throw JsonException("JsonObject must be array type!");
         }
@@ -117,7 +117,7 @@ namespace bjson {
         }
     }
 
-    JsonObject& JsonObject::operator[](const std::string &key) const {
+    JsonObject &JsonObject::operator[](const std::string &key) const {
         if (!is_object()) {
             throw JsonException("JsonObject must be object type!");
         }
@@ -126,6 +126,22 @@ namespace bjson {
             return it->second;
         } else {
             throw JsonException("JsonObject does not contains key!");
+        }
+    }
+
+    JsonObject::~JsonObject() {
+        if (_type == JsonObjectType::Int) {
+            delete _container._int;
+        } else if (_type == JsonObjectType::Bool) {
+            delete _container._boolean;
+        } else if (_type == JsonObjectType::Real) {
+            delete _container._real;
+        } else if (_type == JsonObjectType::String) {
+            delete _container._string;
+        } else if (_type == JsonObjectType::Array) {
+            delete _container._array;
+        } else if (_type == JsonObjectType::Object){
+            delete _container._object;
         }
     }
 }

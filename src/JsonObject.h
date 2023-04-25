@@ -25,16 +25,16 @@ namespace bjson {
 
     class JsonObject {
     private:
-        JsonObjectType _type;
+        JsonObjectType type_;
 
         union Container {
-            double *_real = nullptr;
-            bool *_boolean;
-            int64_t *_int;
-            std::string *_string;
-            std::vector <JsonObject> *_array;
-            std::map <std::string, JsonObject> *_object;
-        } _container;
+            double *real_ = nullptr;
+            bool *boolean_;
+            int64_t *int_;
+            std::string *string_;
+            std::vector<JsonObject> *array_;
+            std::map<std::string, JsonObject> *object_;
+        } container_;
 
     public:
         JsonObject();
@@ -50,43 +50,43 @@ namespace bjson {
         JsonObject(const std::string_view &s);
 
         [[nodiscard]]
-        bool is_null() const;
+        bool IsNull() const;
 
         [[nodiscard]]
-        bool is_int() const;
+        bool IsInt() const;
 
         [[nodiscard]]
-        bool is_real() const;
+        bool IsReal() const;
 
         [[nodiscard]]
-        bool is_bool() const;
+        bool IsBool() const;
 
         [[nodiscard]]
-        bool is_string() const;
+        bool IsString() const;
 
         [[nodiscard]]
-        bool is_object() const;
+        bool IsObject() const;
 
         [[nodiscard]]
-        bool is_array() const;
+        bool IsArray() const;
 
         [[nodiscard]]
-        int64_t &as_int() const;
+        int64_t &AsInt() const;
 
         [[nodiscard]]
-        double &as_real() const;
+        double &AsReal() const;
 
         [[nodiscard]]
-        bool &as_bool() const;
+        bool &AsBool() const;
 
         [[nodiscard]]
-        std::string &as_string() const;
+        std::string &AsString() const;
 
         [[nodiscard]]
-        std::vector <JsonObject> &as_array() const;
+        std::vector<JsonObject> &AsArray() const;
 
         [[nodiscard]]
-        std::map <std::string, JsonObject> &as_object() const;
+        std::map<std::string, JsonObject> &AsObject() const;
 
         [[nodiscard]]
         JsonObject &operator[](size_t key) const;

@@ -11,8 +11,7 @@ add_library(JsonParser STATIC
         src/JsonException.cpp
         src/JsonObject.cpp
         src/JsonParser.cpp
-        src/JsonParserSettings.cpp
-        src/utils/JsonParserStateMachine.cpp)
+        src/JsonParserSettings.cpp)
 
 option(COMPILE_TESTS "Compile lib's tests" False)
 if (${COMPILE_TESTS})

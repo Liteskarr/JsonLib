@@ -13,11 +13,9 @@ namespace bjson {
     public:
         JsonException();
 
-        JsonException(const std::string_view &message);
+        explicit JsonException(const std::string_view &message);
 
-        const char *what() const
-
-        noexcept;
+        const char *what() const noexcept override;
     };
 }
 

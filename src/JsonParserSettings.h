@@ -7,10 +7,6 @@ namespace bjson {
     class JsonParserSettings {
     public:
         bool AllNumbersAsFloats = false;
-
-        JsonParserSettings();
-
-        static JsonParserSettings GetDefault();
     };
 }
 

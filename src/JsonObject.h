@@ -10,91 +10,75 @@
 #include <cstdint>
 #include <cstdbool>
 #include <cstdlib>
+#include <memory>
+#include <variant>
 #include "JsonException.h"
 
 namespace bjson {
-    enum JsonObjectType {
-        Null,
-        Int,
-        Bool,
-        Real,
-        String,
-        Array,
-        Object
-    };
+    class JsonObject;
+
+    using JNull = std::nullptr_t;
+    using JInt = std::shared_ptr<std::int64_t>;
+    using JBool = std::shared_ptr<bool>;
+    using JReal = std::shared_ptr<double>;
+    using JString = std::shared_ptr<std::string>;
+    using JArray = std::shared_ptr<std::vector<JsonObject>>;
+    using JObject = std::shared_ptr<std::map<std::string, JsonObject>>;
 
     class JsonObject {
     private:
-        JsonObjectType type_;
-
-        union Container {
-            double *real_ = nullptr;
-            bool *boolean_;
-            int64_t *int_;
-            std::string *string_;
-            std::vector<JsonObject> *array_;
-            std::map<std::string, JsonObject> *object_;
-        } container_;
+        std::variant<JNull, JInt, JReal, JBool, JString, JArray, JObject> container_;
 
     public:
-        JsonObject();
+        static JsonObject MakeNull();
 
-        explicit JsonObject(JsonObjectType type);
+        static JsonObject MakeInt(int64_t x);
 
-        JsonObject(bool x);
+        static JsonObject MakeReal(double x);
 
-        JsonObject(double x);
+        static JsonObject MakeBool(bool x);
 
-        JsonObject(int64_t x);
+        static JsonObject MakeString(const std::string &s);
 
-        JsonObject(const std::string_view &s);
+        static JsonObject MakeArray();
 
-        [[nodiscard]]
+        static JsonObject MakeArray(std::vector<JsonObject>& v);
+
+        static JsonObject MakeObject();
+
+        static JsonObject MakeObject(std::map<std::string, JsonObject> &m);
+
         bool IsNull() const;
 
-        [[nodiscard]]
         bool IsInt() const;
 
-        [[nodiscard]]
         bool IsReal() const;
 
-        [[nodiscard]]
         bool IsBool() const;
 
-        [[nodiscard]]
         bool IsString() const;
 
-        [[nodiscard]]
         bool IsObject() const;
 
-        [[nodiscard]]
         bool IsArray() const;
 
-        [[nodiscard]]
         int64_t &AsInt() const;
 
-        [[nodiscard]]
         double &AsReal() const;
 
-        [[nodiscard]]
         bool &AsBool() const;
 
-        [[nodiscard]]
         std::string &AsString() const;
 
-        [[nodiscard]]
         std::vector<JsonObject> &AsArray() const;
 
-        [[nodiscard]]
         std::map<std::string, JsonObject> &AsObject() const;
 
-        [[nodiscard]]
         JsonObject &operator[](size_t key) const;
 
-        [[nodiscard]]
         JsonObject &operator[](const std::string &key) const;
 
-        ~JsonObject();
+        JsonObject& operator=(const JsonObject& other);
     };
 }
 

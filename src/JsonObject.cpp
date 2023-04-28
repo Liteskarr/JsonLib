@@ -1,117 +1,137 @@
 #include "JsonObject.h"
 
 namespace bjson {
-    JsonObject::JsonObject() : type_(JsonObjectType::Null) {
+    JsonObject JsonObject::MakeNull() {
+        JsonObject obj;
+        obj.container_ = nullptr;
+        return obj;
     }
 
-    JsonObject::JsonObject(JsonObjectType type) : type_(type) {
-        if (type == JsonObjectType::Bool) {
-            container_.boolean_ = new bool(false);
-        } else if (type_ == JsonObjectType::Int) {
-            container_.int_ = new int64_t(0);
-        } else if (type_ == JsonObjectType::Real) {
-            container_.real_ = new double(0);
-        } else if (type_ == JsonObjectType::String) {
-            container_.string_ = new std::string();
-        } else if (type_ == JsonObjectType::Array) {
-            container_.array_ = new std::vector<JsonObject>();
-        } else if (type_ == JsonObjectType::Object) {
-            container_.object_ = new std::map<std::string, JsonObject>();
-        }
+    JsonObject JsonObject::MakeBool(bool x) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<bool>(x);
+        return obj;
     }
 
-    JsonObject::JsonObject(bool x) : type_(JsonObjectType::Bool) {
-        container_.boolean_ = new bool(x);
+    JsonObject JsonObject::MakeInt(int64_t x) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<int64_t>(x);
+        return obj;
     }
 
-    JsonObject::JsonObject(double x) : type_(JsonObjectType::Real) {
-        container_.real_ = new double(x);
+    JsonObject JsonObject::MakeReal(double x) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<double>(x);
+        return obj;
     }
 
-    JsonObject::JsonObject(int64_t x) : type_(JsonObjectType::Int) {
-        container_.int_ = new int64_t(x);
+    JsonObject JsonObject::MakeString(const std::string &s) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<std::string>(s);
+        return obj;
     }
 
-    JsonObject::JsonObject(const std::string_view &s) : type_(JsonObjectType::String) {
-        container_.string_ = new std::string(s.begin(), s.end());
+    JsonObject JsonObject::MakeArray() {
+        JsonObject obj;
+        obj.container_ = std::make_shared<std::vector<JsonObject>>();
+        return obj;
+    }
+
+    JsonObject JsonObject::MakeArray(std::vector<JsonObject> &v) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<std::vector<JsonObject>>(v);
+        return obj;
+    }
+
+    JsonObject JsonObject::MakeObject() {
+        JsonObject obj;
+        obj.container_ = std::make_shared<std::map<std::string, JsonObject>>();
+        return obj;
+    }
+
+    JsonObject JsonObject::MakeObject(std::map<std::string, JsonObject> &m) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<std::map<std::string, JsonObject>>(m);
+        return obj;
     }
 
     bool JsonObject::IsNull() const {
-        return type_ == JsonObjectType::Null;
+        return std::holds_alternative<JNull>(container_);
     }
 
     bool JsonObject::IsInt() const {
-        return type_ == JsonObjectType::Int;
+        return std::holds_alternative<JInt>(container_);
     }
 
     bool JsonObject::IsReal() const {
-        return type_ == JsonObjectType::Real;
+        return std::holds_alternative<JReal>(container_);
     }
 
     bool JsonObject::IsBool() const {
-        return type_ == JsonObjectType::Bool;
+        return std::holds_alternative<JBool>(container_);
     }
 
     bool JsonObject::IsString() const {
-        return type_ == JsonObjectType::String;
+        return std::holds_alternative<JString>(container_);
     }
 
     bool JsonObject::IsArray() const {
-        return type_ == JsonObjectType::Array;
+        return std::holds_alternative<JArray>(container_);
     }
 
     bool JsonObject::IsObject() const {
-        return type_ == JsonObjectType::Object;
+        return std::holds_alternative<JObject>(container_);
     }
 
     int64_t &JsonObject::AsInt() const {
         if (!IsInt()) {
             throw JsonException("JsonObject must be integer type!");
         }
-        return *container_.int_;
+        return *std::get<JInt>(container_);
     }
 
     double &JsonObject::AsReal() const {
         if (!IsReal()) {
             throw JsonException("JsonObject must be real type!");
         }
-        return *container_.real_;
+        return *std::get<JReal>(container_);
     }
 
     bool &JsonObject::AsBool() const {
         if (!IsBool()) {
             throw JsonException("JsonObject must be boolean type!");
         }
-        return *container_.boolean_;
+        return *std::get<JBool>(container_);
     }
 
     std::string &JsonObject::AsString() const {
         if (!IsString()) {
             throw JsonException("JsonObject must be string type!");
         }
-        return *container_.string_;
+        return *std::get<JString>(container_);
     }
 
     std::vector<JsonObject> &JsonObject::AsArray() const {
         if (!IsArray()) {
             throw JsonException("JsonObject must be array type!");
         }
-        return *container_.array_;
+        return *std::get<JArray>(container_);
     }
 
     std::map<std::string, JsonObject> &JsonObject::AsObject() const {
         if (!IsObject()) {
             throw JsonException("JsonObject must be object type!");
         }
-        return *container_.object_;
+        return *std::get<JObject>(container_);
     }
 
     JsonObject &JsonObject::operator[](size_t key) const {
         if (!IsArray()) {
             throw JsonException("JsonObject must be array type!");
         }
-        if (key < container_.array_->size()) {
-            return (*container_.array_)[key];
+        auto& obj = AsArray();
+        if (key < obj.size()) {
+            return obj[key];
         } else {
             throw JsonException("JsonObject's index out of range!");
         }
@@ -121,27 +141,20 @@ namespace bjson {
         if (!IsObject()) {
             throw JsonException("JsonObject must be object type!");
         }
-        auto it = container_.object_->find(key);
-        if (it != container_.object_->end()) {
+        auto& obj = AsObject();
+        auto it = obj.find(key);
+        if (it != obj.end()) {
             return it->second;
         } else {
             throw JsonException("JsonObject does not contains key!");
         }
     }
 
-    JsonObject::~JsonObject() {
-        if (type_ == JsonObjectType::Int) {
-            delete container_.int_;
-        } else if (type_ == JsonObjectType::Bool) {
-            delete container_.boolean_;
-        } else if (type_ == JsonObjectType::Real) {
-            delete container_.real_;
-        } else if (type_ == JsonObjectType::String) {
-            delete container_.string_;
-        } else if (type_ == JsonObjectType::Array) {
-            delete container_.array_;
-        } else if (type_ == JsonObjectType::Object) {
-            delete container_.object_;
+    JsonObject &JsonObject::operator=(const bjson::JsonObject &other) {
+        if (this == &other) {
+            return *this;
         }
+        this->container_ = other.container_;
+        return *this;
     }
 }

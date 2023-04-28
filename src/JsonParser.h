@@ -38,9 +38,7 @@ namespace bjson {
         std::string Preprocess(const std::string& s);
 
     public:
-        JsonParser();
-
-        explicit JsonParser(JsonParserSettings settings);
+        explicit JsonParser(JsonParserSettings settings = JsonParserSettings());
 
         JsonObject Parse(const std::string &s);
 

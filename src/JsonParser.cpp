@@ -196,9 +196,6 @@ namespace bjson {
         return result;
     }
 
-    JsonParser::JsonParser() : settings_(JsonParserSettings()) {
-    }
-
     JsonParser::JsonParser(bjson::JsonParserSettings settings) : settings_(settings) {
     }
 

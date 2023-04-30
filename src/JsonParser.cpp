@@ -107,7 +107,7 @@ namespace bjson {
                 }
                 ++object_end;
             }
-            v.push_back(ParseValue(s, begin, object_end + 1));
+            v.push_back(ParseValue(s, begin, object_end));
             while (begin < end && s[begin] != ',') {
                 ++begin;
             }

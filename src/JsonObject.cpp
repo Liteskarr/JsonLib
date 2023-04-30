@@ -129,7 +129,7 @@ namespace bjson {
         if (!IsArray()) {
             throw JsonException("JsonObject must be array type!");
         }
-        auto& obj = AsArray();
+        auto &obj = AsArray();
         if (key < obj.size()) {
             return obj[key];
         } else {
@@ -141,7 +141,7 @@ namespace bjson {
         if (!IsObject()) {
             throw JsonException("JsonObject must be object type!");
         }
-        auto& obj = AsObject();
+        auto &obj = AsObject();
         auto it = obj.find(key);
         if (it != obj.end()) {
             return it->second;
@@ -156,5 +156,25 @@ namespace bjson {
         }
         this->container_ = other.container_;
         return *this;
+    }
+
+    bool JsonObject::operator==(const bjson::JsonObject &other) const {
+        if (IsNull() && other.IsNull()) {
+            return true;
+        } else if (IsBool() && other.IsBool()) {
+            return AsBool() == other.AsBool();
+        } else if (IsInt() && other.IsInt()) {
+            return AsInt() == other.IsInt();
+        } else if (IsReal() && other.IsReal()) {
+            return AsReal() == other.AsReal();
+        } else if (IsString() && other.IsString()) {
+            return AsString() == other.AsString();
+        } else if (IsArray() && other.IsArray()) {
+            return AsArray() == other.AsArray();
+        } else if (IsObject() && other.IsObject()) {
+            return AsObject() == other.AsObject();
+        } else {
+            return false;
+        }
     }
 }

@@ -79,6 +79,8 @@ namespace bjson {
         JsonObject &operator[](const std::string &key) const;
 
         JsonObject& operator=(const JsonObject& other);
+
+        bool operator==(const JsonObject& other) const;
     };
 }
 

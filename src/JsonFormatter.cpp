@@ -14,9 +14,9 @@ namespace bjson {
             result += ToString(*it, depth + 1);
             if (it != v.end() - 1) {
                 result += ',';
-                if (settings_.PrettyFormat) {
-                    result += '\n';
-                }
+            }
+            if (settings_.PrettyFormat) {
+                result += '\n';
             }
         }
         for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
@@ -27,26 +27,38 @@ namespace bjson {
     }
 
     std::string JsonFormatter::JsonObjectToString(bjson::JsonObject obj, size_t depth) {
-        std::string result = "{";
+        std::string result;
+        for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
+            result += ' ';
+        }
+        result += "{";
+        if (settings_.PrettyFormat) {
+            result += '\n';
+        }
         auto v = obj.AsObject();
         for (auto it = v.begin(); it != v.end(); ++it) {
-            for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
+            for (size_t i = 0; i < (depth + 1) * settings_.TabSize && settings_.PrettyFormat; ++i) {
                 result += ' ';
             }
+            result += '"';
             result += it->first;
+            result += '"';
             result += (settings_.PrettyFormat ? ": " : ":");
             result += ToString(it->second, depth + 1);
             if (it != prev(v.end())) {
                 result += ',';
-                if (settings_.PrettyFormat) {
-                    result += '\n';
-                }
+            }
+            if (settings_.PrettyFormat) {
+                result += '\n';
             }
         }
         for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
             result += ' ';
         }
         result += '}';
+        if (settings_.PrettyFormat) {
+            result += '\n';
+        }
         return result;
     }
 
@@ -61,11 +73,11 @@ namespace bjson {
         } else if (obj.IsReal()) {
             return std::to_string(obj.AsReal());
         } else if (obj.IsString()) {
-            return obj.AsString();
+            return "\"" + obj.AsString() + "\"";
         } else if (obj.IsArray()) {
-            return JsonArrayToString(obj, depth + 1);
+            return JsonArrayToString(obj, depth);
         } else if (obj.IsObject()) {
-            return JsonObjectToString(obj, depth + 1);
+            return JsonObjectToString(obj, depth);
         }
         return result;
     }

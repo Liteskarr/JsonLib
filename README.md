@@ -13,19 +13,19 @@ Some examples to API understanding.
 #### Objects creation
 ```c++
 JsonObject::MakeNull(); // Creates equivalent to 'null'
-JsonObject::MakeBool(true) // Creates equivalent to 'true'
-JsonObject::MakeBool(false) // Creates equivalent to 'false'
-JsonObject::MakeInt(32) // Creates equivalent to '32'
-JsonObject::MakeReal(3.1415926) // Creates equivalent to '3.1415926'
-JsonObject::MakeString("Hello, Json!") // Creates equivalent to "Hello, Json!"
+JsonObject::MakeBool(true); // Creates equivalent to 'true'
+JsonObject::MakeBool(false); // Creates equivalent to 'false'
+JsonObject::MakeInt(32); // Creates equivalent to '32'
+JsonObject::MakeReal(3.1415926); // Creates equivalent to '3.1415926'
+JsonObject::MakeString("Hello, Json!"); // Creates equivalent to "Hello, Json!"
 
-JsonObject::MakeArray() // Creates equivalent to '[]'
+JsonObject::MakeArray(); // Creates equivalent to '[]'
 JsonObject::MakeArray({
     JsonObject::MakeNull(), 
     JsonObject::MakeBool(false),
     JsonObject::MakeString("I love minecraft!"),
-}) // Creates equivalent to [null, false, "I love minecraft!"]
-JsonObject::MakeObject() // Creates equivalent to '{}'
+}); // Creates equivalent to [null, false, "I love minecraft!"]
+JsonObject::MakeObject(); // Creates equivalent to '{}'
 
 JsonObject::MakeObject({
     {"PI": JsonObject::MakeReal(3.14)},
@@ -35,7 +35,7 @@ JsonObject::MakeObject({
         JsonObject::MakeInt(64),
         JsonObject::MakeBool(true)
     )}
-}) // Creates equivalent to {"PI": 3.14, "E": 2.71, "values": [32, 64, true]}
+}); // Creates equivalent to {"PI": 3.14, "E": 2.71, "values": [32, 64, true]}
 ```
 
 #### Strings parsing
@@ -59,10 +59,10 @@ auto obj = JsonObject::MakeArray({
     JsonObject::MakeString("text")
 });
 
-ToString(obj, {.PrettyFormat = false}) 
+ToString(obj, {.PrettyFormat = false});
 // [1,null,{"hello":"world"},false,"text"]
 
-ToString(obj, {.PrettyFromat = true})
+ToString(obj, {.PrettyFromat = true});
 // [
 //    1,
 //    null,
@@ -73,10 +73,10 @@ ToString(obj, {.PrettyFromat = true})
 //    "text"
 // ]
 
-SaveToFile("result.json", obj, {.PrettyFormat = false}) 
+SaveToFile("result.json", obj, {.PrettyFormat = false}); 
 // Saves obj to "result.json" wihtout pretty format
 
-SaveToFile("result.json", obj, {.PrettyFormat = true}) 
+SaveToFile("result.json", obj, {.PrettyFormat = true});
 // Saves obj to "result.json" wiht pretty format
 ```
 

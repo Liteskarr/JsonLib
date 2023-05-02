@@ -3,11 +3,6 @@ project(JsonLib VERSION 1.0)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# ######
-# GLOBAL
-# ######
-include_directories(src)
-
 # #######
 # LIBRARY
 # #######
@@ -16,8 +11,6 @@ add_library(JsonLib STATIC
         src/JsonObject.cpp
         src/JsonParser.cpp
         src/JsonFormatter.cpp
-        src/JsonParserSettings.cpp
-        src/JsonFormatterSettings.cpp
         src/JsonFunctions.cpp)
 set_target_properties(JsonLib PROPERTIES PREFIX "")
 set_target_properties(JsonLib PROPERTIES OUTPUT_NAME "bjson")

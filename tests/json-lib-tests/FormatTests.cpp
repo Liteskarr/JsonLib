@@ -18,10 +18,10 @@ TEST(FormatTests, PrettyObjectFormatTest1) {
     auto &obj_map = obj.AsObject();
     obj_map["hello"] = JsonObject::MakeInt(int1);
     obj_map["world"] = JsonObject::MakeString("string");
-    obj_map["key"] = JsonObject::MakeArray(*new std::vector<JsonObject>{
-            JsonObject::MakeInt(1),
-            JsonObject::MakeInt(2)
-    });
+    obj_map["key"] = JsonObject::MakeArray({
+                                                   JsonObject::MakeInt(1),
+                                                   JsonObject::MakeInt(2)
+                                           });
     ASSERT_EQ(ToString(obj, {.PrettyFormat = true}), expected_string);
 }
 
@@ -48,9 +48,9 @@ TEST(FormatTests, PrettyArrayFormatTest1) {
     std::vector<JsonObject> v = {
             JsonObject::MakeInt(1ll),
             JsonObject::MakeNull(),
-            JsonObject::MakeObject(*new std::map<std::string, JsonObject>{
-                    {"hello", JsonObject::MakeString("world")}
-            }),
+            JsonObject::MakeObject({
+                                           {"hello", JsonObject::MakeString("world")}
+                                   }),
             JsonObject::MakeBool(false),
             JsonObject::MakeString("text")
     };

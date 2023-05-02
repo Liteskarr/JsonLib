@@ -5,10 +5,14 @@ namespace bjson {
     }
 
     std::string JsonFormatter::JsonArrayToString(bjson::JsonObject obj, size_t depth) {
-        std::string result = "[";
+        std::string result;
+        result += '[';
+        if (settings_.PrettyFormat) {
+            result += '\n';
+        }
         auto v = obj.AsArray();
         for (auto it = v.begin(); it != v.end(); ++it) {
-            for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
+            for (size_t i = 0; i < (depth + 1) * settings_.TabSize && settings_.PrettyFormat; ++i) {
                 result += ' ';
             }
             result += ToString(*it, depth + 1);
@@ -28,9 +32,6 @@ namespace bjson {
 
     std::string JsonFormatter::JsonObjectToString(bjson::JsonObject obj, size_t depth) {
         std::string result;
-        for (size_t i = 0; i < depth * settings_.TabSize && settings_.PrettyFormat; ++i) {
-            result += ' ';
-        }
         result += "{";
         if (settings_.PrettyFormat) {
             result += '\n';
@@ -56,9 +57,6 @@ namespace bjson {
             result += ' ';
         }
         result += '}';
-        if (settings_.PrettyFormat) {
-            result += '\n';
-        }
         return result;
     }
 

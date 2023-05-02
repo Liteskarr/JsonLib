@@ -9,13 +9,25 @@
 #include "JsonFormatterSettings.h"
 
 namespace bjson {
+    /// Returns JsonObject from json string
+    /// @param s Raw json string
+    /// @param settings Settings for parsing
     JsonObject ParseString(const std::string &s, JsonParserSettings settings = JsonParserSettings());
 
+    /// Returns JsonObject from json file
+    /// @param filename Path to json file
+    /// @param settings Settings for parsing
     JsonObject ParseFile(const std::string& filename, JsonParserSettings settings = JsonParserSettings());
 
+    /// Returns string representation of JsonObject
+    /// @param obj JsonObject for representation
+    /// @param settings Settings for formatting
     std::string ToString(JsonObject obj, JsonFormatterSettings settings = JsonFormatterSettings());
 
-    void SaveToFile(const std::string& filename, JsonObject obj, JsonFormatterSettings = JsonFormatterSettings());
+    /// Saves representation of JsonObject to file
+    /// @param filename Path to file with result
+    /// @param settings Settings for formatting
+    void SaveToFile(const std::string& filename, JsonObject obj, JsonFormatterSettings settings = JsonFormatterSettings());
 }
 
 #endif

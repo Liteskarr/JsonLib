@@ -11,13 +11,13 @@ namespace bjson {
         return c == ' ' || c == '\t' || c == '\n' || c == '\r';
     }
 
-    size_t JsonParser::FindCloseBracket(const std::string &s, size_t begin, char open, char closed) {
-        int32_t balance = s[begin] == open;
+    size_t JsonParser::FindCloseBracket(const std::string &s, size_t begin, size_t end, char opened, char closed) {
+        int32_t balance = s[begin] == opened;
         bool is_literal = false;
         ++begin;
-        while (begin < s.size()) {
+        while (begin < end) {
             if (!is_literal){
-                if (s[begin] == open) {
+                if (s[begin] == opened) {
                     ++balance;
                 } else if (s[begin] == closed) {
                     --balance;
@@ -76,7 +76,7 @@ namespace bjson {
     }
 
     JsonObject JsonParser::ParseNumber(const std::string &s, size_t begin, size_t end) {
-        auto is_int = !settings_.AllNumbersAsFloats;
+        auto is_int = !settings_.AllNumbersAsReal;
         for (size_t i = begin; is_int && i != end; ++i) {
             is_int &= std::isdigit(s[i]) || s[i] == '-' || s[i] == '+';
         }
@@ -166,9 +166,9 @@ namespace bjson {
             return JsonObject::MakeNull();
         }
         if (s[begin] == '{') {
-            return ParseObject(s, begin + 1, FindCloseBracket(s, begin, '{', '}'));
+            return ParseObject(s, begin + 1, FindCloseBracket(s, begin, end, '{', '}'));
         } else if (s[begin] == '[') {
-            return ParseArray(s, begin + 1, FindCloseBracket(s, begin, '[', ']'));
+            return ParseArray(s, begin + 1, FindCloseBracket(s, begin, end, '[', ']'));
         } else if (s[begin] == 't' || s[begin] == 'f') {
             return ParseBool(s, begin, end);
         } else if (s[begin] == 'n') {

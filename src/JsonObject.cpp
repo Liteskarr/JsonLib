@@ -13,6 +13,12 @@ namespace bjson {
         return obj;
     }
 
+    JsonObject JsonObject::MakeInt(int32_t x) {
+        JsonObject obj;
+        obj.container_ = std::make_shared<int64_t>(static_cast<int64_t>(x));
+        return obj;
+    }
+
     JsonObject JsonObject::MakeInt(int64_t x) {
         JsonObject obj;
         obj.container_ = std::make_shared<int64_t>(x);
@@ -37,9 +43,11 @@ namespace bjson {
         return obj;
     }
 
-    JsonObject JsonObject::MakeArray(std::vector<JsonObject> &v) {
+    JsonObject JsonObject::MakeArray(std::vector<JsonObject> v) {
         JsonObject obj;
-        obj.container_ = std::make_shared<std::vector<JsonObject>>(v);
+        obj.container_ = std::shared_ptr<std::vector<JsonObject>>(
+                new std::vector<JsonObject>(v.begin(), v.end())
+        );
         return obj;
     }
 
@@ -49,9 +57,11 @@ namespace bjson {
         return obj;
     }
 
-    JsonObject JsonObject::MakeObject(std::map<std::string, JsonObject> &m) {
+    JsonObject JsonObject::MakeObject(std::map<std::string, JsonObject> m) {
         JsonObject obj;
-        obj.container_ = std::make_shared<std::map<std::string, JsonObject>>(m);
+        obj.container_ = std::shared_ptr<std::map<std::string, JsonObject>>(
+                new std::map<std::string, JsonObject>(m.begin(), m.end())
+        );
         return obj;
     }
 

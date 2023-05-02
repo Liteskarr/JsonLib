@@ -6,9 +6,10 @@
 #include <exception>
 
 namespace bjson {
+    /// Base exception for JsonLib
     class JsonException : std::exception {
     private:
-        std::string _message;
+        std::string message_;
 
     public:
         JsonException();

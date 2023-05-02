@@ -6,7 +6,8 @@
 namespace bjson {
     class JsonParserSettings {
     public:
-        bool AllNumbersAsFloats = false;
+        /// Setting for loading all numbers as real
+        bool AllNumbersAsReal = false;
     };
 }
 
